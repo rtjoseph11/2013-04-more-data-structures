@@ -39,5 +39,13 @@ describe("linkedList", function() {
     linkedList.removeHead();
     expect(linkedList.removeHead()).toEqual("b");
   });
+  it("should find elements in the list", function(){
+    linkedList.addToTail("a");
+    linkedList.addToTail("c");
+    linkedList.addToTail("b");
+    expect(linkedList.contains("a")).toEqual(true);
+    expect(linkedList.contains("b")).toEqual(true);
+    expect(linkedList.contains("c")).toEqual(true);
+  });
 
 });
