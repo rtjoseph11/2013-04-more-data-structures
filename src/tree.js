@@ -13,17 +13,22 @@ treeMethods.addChild = function(value){
   this.children.push(node);
 };
 
-treeMethods.contains = function(value, result){
-  result = result || false;
-  if (this.value === value){
+treeMethods.contains = function(value){
+  result = false;
+
+  rSearch = function(context){
+    if (context.value === value){
     result = true;
-  }
-  else if (this.children.length){
-    _.each(children, function(item){
-      if (!result){
-        result = item.contains(value, result);
+    } else if (context.children !== undefined && context.children.length){
+    _.each(context.children,function(item){
+      if(!result){
+        //ebugger;
+        rSearch(item);
       }
     });
   }
+  };
+  //debugger;
+  rSearch(this);
   return result;
 };
