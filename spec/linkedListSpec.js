@@ -16,5 +16,28 @@ describe("linkedList", function() {
     expect(linkedList.contains).toEqual(jasmine.any(Function));
   });
 
-  // add more tests here to test the functionality of linkedList
+  it("the first element should point to null",function(){
+    linkedList.addToTail("a");
+    var temp = linkedList.removeHead();
+    expect(temp).toEqual("a");
+  });
+
+  it("should add an element tothe list", function(){
+    linkedList.addToTail("a");
+    expect(linkedList.contains("a")).toBe(true);
+  });
+
+  it("should add to the end of the list", function(){
+    linkedList.addToTail("a");
+    linkedList.addToTail("b");
+    expect(linkedList.removeHead()).toEqual("a");
+  });
+
+  it("should remove an element from the head", function(){
+    linkedList.addToTail("a");
+    linkedList.addToTail("b");
+    linkedList.removeHead();
+    expect(linkedList.removeHead()).toEqual("b");
+  });
+
 });
