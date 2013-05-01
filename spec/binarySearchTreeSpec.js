@@ -2,11 +2,11 @@ describe("binarySearchTree", function() {
   var binarySearchTree;
 
   beforeEach(function() {
-    binarySearchTree = makeBinarySearchTree(10);
+    binarySearchTree = new BinarySearchTree(10);
   });
 
   it("should have methods named 'insert', 'contains', and 'depthFirstLog", function() {
-    expect(binarySearchTree.children).toEqual(jasmine.any(Function));
+    expect(binarySearchTree.insert).toEqual(jasmine.any(Function));
     expect(binarySearchTree.contains).toEqual(jasmine.any(Function));
     expect(binarySearchTree.depthFirstLog).toEqual(jasmine.any(Function));
   });
@@ -30,7 +30,7 @@ describe("binarySearchTree", function() {
       expect(binarySearchTree.left.value).toEqual(3);
       expect(binarySearchTree.right.value).toEqual(30);
       expect(binarySearchTree.left.right.value).toEqual(7);
-      expect(binarySearchTree.left.left.right.value).toEqual(1);
+      expect(binarySearchTree.left.left.right.value).toEqual(2);
     });
   });
   describe("#contains", function(){
