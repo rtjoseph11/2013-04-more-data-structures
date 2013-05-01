@@ -15,20 +15,17 @@ treeMethods.addChild = function(value){
 
 treeMethods.contains = function(value){
   result = false;
-
   rSearch = function(context){
     if (context.value === value){
     result = true;
     } else if (context.children !== undefined && context.children.length){
     _.each(context.children,function(item){
       if(!result){
-        //ebugger;
         rSearch(item);
       }
     });
   }
   };
-  //debugger;
   rSearch(this);
   return result;
 };
