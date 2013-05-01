@@ -16,8 +16,15 @@ describe("parentTree", function() {
   it("should have methods named 'addChild' and 'contains', and a property named 'value'", function() {
     expect(parentTree.addChild).toEqual(jasmine.any(Function));
     expect(parentTree.contains).toEqual(jasmine.any(Function));
-    expect(parentTree.removeFromParent).toEqaul(jasmine.any(Function));
-    expect('value' in parentTree).toBe(true);
-    expect('parent' in parentTree).toBe(true);
+    expect(parentTree.removeFromParent).toEqual(jasmine.any(Function));
+    expect('value' in parentTree).toEqual(true);
+    expect('parent' in parentTree).toEqual(true);
+    expect('children' in parentTree).toEqual(true);
   });
+  describe("#addChild", function(){
+    
+
+    expect(parentTree.children[0].value).toEqual("a");
+  });
+
 });
