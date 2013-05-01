@@ -20,6 +20,13 @@ describe("hashTable", function() {
       hashTable.insert('a',2);
       expect(hashTable.retrieve('a')).toEqual(2);
     });
+    it('should handle collisions gacefully', function(){
+      hashTable._limit = 1;
+      hashTable.insert('a',1);
+      hashTable.insert('b',2);
+      expect(hashTable.retrieve('a')).toEqual(1);
+      expect(hashTable.retrieve('b')).toEqual(2);
+    });
   });
   describe("#retrieve()", function(){
     it('should retrieve the right value for a key', function(){
