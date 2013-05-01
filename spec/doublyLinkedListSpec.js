@@ -1,6 +1,5 @@
 describe("doublyLinkedList", function() {
   var dll;
-
   beforeEach(function() {
     dll = makeDoublyLinkedList();
   });
@@ -10,17 +9,17 @@ describe("doublyLinkedList", function() {
     expect(Object.keys(dll)).toContain("tail");
   });
 
-  it("should have methods named 'addToTail', 'removeHead', and 'contains'", function() {
+  it("should have methods named 'addToTail', 'removeFromHead', and 'contains'", function() {
     expect(dll.addToTail).toEqual(jasmine.any(Function));
-    expect(dll.removeHead).toEqual(jasmine.any(Function));
+    expect(dll.removeFromHead).toEqual(jasmine.any(Function));
     expect(dll.contains).toEqual(jasmine.any(Function));
     expect(dll.addToHead).toEqual(jasmine.any(Function));
-    expect(dll.removeTail).toEqual(jasmine.any(Function));
+    expect(dll.removeFromTail).toEqual(jasmine.any(Function));
   });
   describe("#addToTail", function(){
     it("the first element should point to null",function(){
       dll.addToTail("a");
-      var temp = dll.removeHead();
+      var temp = dll.removeFromHead();
       expect(temp).toEqual("a");
     });
     it("addToTail should add to the list", function(){
@@ -54,34 +53,49 @@ describe("doublyLinkedList", function() {
     });
   });
   describe("#removeFromHead", function(){
+    beforeEach(function(){
+      dll.addToHead('b');
+      dll.addToHead('a');
+      dll.addToTail('c');
+    });
     it("should remove an element",function(){
+      expect(dll.removeFromHead()).toEqual('a');
 
     });
     it("the second element should become the head", function(){
-
+      expect(dll.removeFromHead()).toEqual('a');
+      expect(dll.removeFromHead()).toEqual('b');
+      expect(dll.head.value).toEqual('c');
     });
     it("should return the removed element", function(){
-
+      expect(dll.removeFromHead()).toEqual('a');
     });
   });
   describe("#removeFromTail", function(){
+    beforeEach(function(){
+      dll.addToHead('b');
+      dll.addToHead('a');
+      dll.addToTail('c');
+    });
     it("should remove an element",function(){
-
+      expect(dll.removeFromTail()).toEqual('c');
     });
     it("the penultimate element should become the tail", function(){
-
+      dll.removeFromTail();
+      expect(dll.tail.value).toEqual('b');
     });
     it("should return the removed element", function(){
-
+      expect(dll.removeFromTail()).toEqual('c');
     });
   });
-  
-
-  it("should remove an element from the head", function(){
-    linkedList.addToTail("a");
-    linkedList.addToTail("b");
-    linkedList.removeHead();
-    expect(linkedList.removeHead()).toEqual("b");
+  describe("#contains", function(){
+    it("should find elements in the list", function(){
+      dll.addToTail("a");
+      dll.addToTail("c");
+      dll.addToTail("b");
+      expect(dll.contains("a")).toEqual(true);
+      expect(dll.contains("b")).toEqual(true);
+      expect(dll.contains("c")).toEqual(true);
+    });
   });
-
 });
