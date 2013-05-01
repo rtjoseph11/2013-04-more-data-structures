@@ -11,44 +11,44 @@ describe("binarySearchTree", function() {
     expect(binarySearchTree.depthFirstLog).toEqual(jasmine.any(Function));
   });
   describe("#insert", function(){
-    // it("should insert a value", function(){
-    //   binarySearchTree.insert(3);
-    //   expect(binarySearchTree.left.value).toEqual(3);
-    // });
-    // it("should insert values on the left and right of an element", function(){
-    //   binarySearchTree.insert(3);
-    //   binarySearchTree.insert(30);
-    //   expect(binarySearchTree.left.value).toEqual(3);
-    //   expect(binarySearchTree.right.value).toEqual(30);
-    // });
-    // it("should insert multiple levels deep in the tree",function(){
-    //   binarySearchTree.insert(3);
-    //   binarySearchTree.insert(30);
-    //   binarySearchTree.insert(7);
-    //   binarySearchTree.insert(1);
-    //   binarySearchTree.insert(2);
-    //   expect(binarySearchTree.left.value).toEqual(3);
-    //   expect(binarySearchTree.right.value).toEqual(30);
-    //   expect(binarySearchTree.left.right.value).toEqual(7);
-    //   expect(binarySearchTree.left.left.right.value).toEqual(2);
-    // });
-    // it("should maintain the maximum depth", function(){
-    //   expect(binarySearchTree.maxDepth).toEqual(1);
-    //   binarySearchTree.insert(3);
-    //   expect(binarySearchTree.maxDepth).toEqual(2);
-    //   binarySearchTree.insert(30);
-    //   expect(binarySearchTree.maxDepth).toEqual(2);
-    //   binarySearchTree.insert(7);
-    //   expect(binarySearchTree.maxDepth).toEqual(3);
-    // });
-    it("should maintain the minimum depth", function(){
-      //expect(binarySearchTree.minDepth).toEqual(1);
+    it("should insert a value", function(){
       binarySearchTree.insert(3);
-      //expect(binarySearchTree.minDepth).toEqual(2);
+      expect(binarySearchTree.left.value).toEqual(3);
+    });
+    it("should insert values on the left and right of an element", function(){
+      binarySearchTree.insert(3);
       binarySearchTree.insert(30);
-      //expect(binarySearchTree.minDepth).toEqual(2);
+      expect(binarySearchTree.left.value).toEqual(3);
+      expect(binarySearchTree.right.value).toEqual(30);
+    });
+    it("should insert multiple levels deep in the tree",function(){
+      binarySearchTree.insert(3);
+      binarySearchTree.insert(30);
       binarySearchTree.insert(7);
-      expect(binarySearchTree.minDepth).toEqual(3);
+      binarySearchTree.insert(1);
+      binarySearchTree.insert(2);
+      expect(binarySearchTree.left.value).toEqual(3);
+      expect(binarySearchTree.right.value).toEqual(30);
+      expect(binarySearchTree.left.right.value).toEqual(7);
+      expect(binarySearchTree.left.left.right.value).toEqual(2);
+    });
+    it("should maintain the maximum depth", function(){
+      expect(binarySearchTree.maxDepth).toEqual(1);
+      binarySearchTree.insert(3);
+      expect(binarySearchTree.maxDepth).toEqual(2);
+      binarySearchTree.insert(30);
+      expect(binarySearchTree.maxDepth).toEqual(2);
+      binarySearchTree.insert(7);
+      expect(binarySearchTree.maxDepth).toEqual(3);
+    });
+    it("should maintain the minimum depth", function(){
+      expect(binarySearchTree.minDepth).toEqual(1);
+      binarySearchTree.insert(3);
+      expect(binarySearchTree.minDepth).toEqual(2);
+      binarySearchTree.insert(30);
+      expect(binarySearchTree.minDepth).toEqual(2);
+      binarySearchTree.insert(7);
+      expect(binarySearchTree.minDepth).toEqual(2);
       binarySearchTree.insert(50);
       expect(binarySearchTree.minDepth).toEqual(3);
     });

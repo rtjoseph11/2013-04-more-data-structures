@@ -33,6 +33,9 @@ BinarySearchTree.prototype.insert = function(value){
     root.maxDepth = depth;
   }
   this.setMinDepth();
+  if (this.minDepth*2 < this.maxDepth){
+    this.rebalance();
+  }
 };
 
 BinarySearchTree.prototype.contains = function(value){
@@ -89,9 +92,6 @@ BinarySearchTree.prototype.setMinDepth = function() {
   var checker = function(tuple){
     var node = tuple[0];
     var currDepth = tuple[1];
-    if (currDepth >= 2){
-      debugger;
-    }
     if (node.left !== null){
       storage.push([node.left, currDepth + 1]);
     }
@@ -108,4 +108,8 @@ BinarySearchTree.prototype.setMinDepth = function() {
     checker(storage[0]);
   }
   this.minDepth = depth;
+};
+
+BinarySearchTree.prototype.rebalance = function(){
+
 };
