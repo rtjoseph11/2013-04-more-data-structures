@@ -30,11 +30,12 @@ describe("parentTree", function() {
     });
   });
   describe("#removeFromParent", function(){
+    var removedNode;
     beforeEach(function(){
-      parentTree.children[1].removeFromParent();
+      removedNode = parentTree.children[1].removeFromParent();
     });
     it("should have its parent property set to null", function(){
-      expect(parentTree.children[1].parent).toEqual(null);
+      expect(removedNode.parent).toEqual(null);
     });
     it("shold not be pointed to by the parent", function(){
       expect(parentTree.contains('b')).toEqual(false);
