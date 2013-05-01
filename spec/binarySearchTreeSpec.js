@@ -77,7 +77,25 @@ describe("binarySearchTree", function() {
     });
   });
   describe("#breadthFirstLog", function(){
-
+    beforeEach(function(){
+      binarySearchTree.insert(3);
+      binarySearchTree.insert(30);
+      binarySearchTree.insert(7);
+      binarySearchTree.insert(1);
+      binarySearchTree.insert(2);
+      binarySearchTree.insert(50);
+    });
+    it("should execute the callback on each element in the tree", function(){
+      binarySearchTree.depthFirstLog(function(value){
+        return value * 2;
+      });
+      expect(binarySearchTree.contains(6)).toEqual(true);
+      expect(binarySearchTree.contains(60)).toEqual(true);
+      expect(binarySearchTree.contains(14)).toEqual(true);
+      expect(binarySearchTree.contains(2)).toEqual(true);
+      expect(binarySearchTree.contains(4)).toEqual(true);
+      expect(binarySearchTree.contains(100)).toEqual(true);
+    });
   });
 
 
