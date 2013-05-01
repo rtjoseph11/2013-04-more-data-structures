@@ -42,5 +42,11 @@ BinarySearchTree.prototype.contains = function(value){
 
 };
 BinarySearchTree.prototype.depthFirstLog = function(callback){
-
+  this.value = callback(this.value);
+  if(this.left !== null){
+    this.left.depthFirstLog(callback);
+  }
+  if (this.right !==null) {
+    this.right.depthFirstLog(callback);
+  }
 };
