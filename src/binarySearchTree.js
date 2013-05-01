@@ -50,3 +50,20 @@ BinarySearchTree.prototype.depthFirstLog = function(callback){
     this.right.depthFirstLog(callback);
   }
 };
+BinarySearchTree.prototype.breadthFirstLog = function(callback){
+  var storage = [];
+  storage.push(this);
+  var caller = function(node){
+    node.value = callback(node.value);
+    if (node.left !== null){
+      storage.push(node.left);
+    }
+    if (node.right !== null){
+      storage.push(node.right);
+    }
+    storage.shift();
+  };
+  while (storage.length > 0){
+    caller(storage[0]);
+  }
+};

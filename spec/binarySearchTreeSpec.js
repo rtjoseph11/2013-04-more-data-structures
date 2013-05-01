@@ -86,7 +86,7 @@ describe("binarySearchTree", function() {
       binarySearchTree.insert(50);
     });
     it("should execute the callback on each element in the tree", function(){
-      binarySearchTree.depthFirstLog(function(value){
+      binarySearchTree.breadthFirstLog(function(value){
         return value * 2;
       });
       expect(binarySearchTree.contains(6)).toEqual(true);
