@@ -29,3 +29,10 @@ treeMethods.contains = function(value){
   rSearch(this);
   return result;
 };
+treeMethods.traverse = function(callback){
+  var self = this;
+  self.value = callback(self.value);
+  _.each(self.children, function(element){
+    element.traverse(callback);
+  });
+};
