@@ -121,10 +121,15 @@ describe("binarySearchTree", function() {
     beforeEach(function(){
       binarySearchTree.insert(3);
       binarySearchTree.insert(30);
-
       binarySearchTree.insert(7);
       binarySearchTree.insert(6);
       binarySearchTree.insert(5);
+    });
+    it("should rebalance the tree", function(){
+      expect(binarySearchTree.maxDepth).not.toEqual(5);
+    });
+    it("should recreate a balanced tree", function(){
+      //expect(false).toEqual(true);
     });
     it("should contain all elements after rebalancing", function(){
       expect(binarySearchTree.contains(3)).toEqual(true);
