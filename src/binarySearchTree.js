@@ -126,7 +126,6 @@ BinarySearchTree.prototype.rebalance = function(){
   storageArray = _.sortBy(storageArray, function(item){
     return Math.abs(item-self.value);
   });
-  debugger;
   self.right = null;
   self.minDepth = 1;
   self.maxDepth = 1;

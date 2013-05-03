@@ -39,6 +39,25 @@ describe("tree", function() {
       expect(tree.value).toEqual('rootNode');
     });
   });
+  describe('#traverse()', function(){
+    it("should apply a function to every element in the tree", function(){
+      tree.traverse(function(value){
+        return value + "X";
+      });
+      expect(tree.contains('rootNodeX')).toEqual(true);
+      expect(tree.contains('aX')).toEqual(true);
+      expect(tree.contains('bX')).toEqual(true);
+      expect(tree.contains('cX')).toEqual(true);
+      expect(tree.contains('dX')).toEqual(false);
+      expect(tree.contains('deep1X')).toEqual(true);
+      expect(tree.contains('reallydeep0X')).toEqual(true);
+      expect(tree.contains('rootNode')).toEqual(false);
+      expect(tree.contains('a')).toEqual(false);
+      expect(tree.contains('b')).toEqual(false);
+      expect(tree.contains('c')).toEqual(false);
+      expect(tree.contains('d')).toEqual(false);
+    });
+  });
 
   // Add more tests here to test the functionality of tree.
 });

@@ -44,5 +44,38 @@ describe("hashTable", function() {
       expect(hashTable.retrieve('b')).toEqual(undefined);
     });
   });
-  // add more tests here to test the functionality of hashTable
+  describe("#countFilledElements", function(){
+    it("should return the correct hash array length", function(){
+      hashTable.insert("nick", 1);
+      expect(hashTable.countFilledElements()).toEqual(1);
+      hashTable.insert("tucker",2);
+      expect(hashTable.countFilledElements()).toEqual(2);
+      hashTable.insert("sebastian",3);
+      expect(hashTable.countFilledElements()).toEqual(3);
+      hashTable.insert("char",4);
+      expect(hashTable.countFilledElements()).toEqual(3);
+    });
+  });
+  describe("#sizeUp", function(){
+    it("should resize the hash table", function(){
+    hashTable._limit = 2;
+    hashTable.insert("nick", 190);
+    hashTable.insert("tucker", 1);
+    expect(hashTable._limit).toEqual(4);
+    expect(hashTable.retrieve("tucker")).toEqual(1);
+    expect(hashTable.retrieve("nick")).toEqual(190);
+    hashTable.insert("sebastian", 1);
+    expect(hashTable._limit).toEqual(8);
+    });
+  });
+  describe("#sizeDown", function(){
+    it("should resize the hash table", function(){
+    hashTable._limit = 5;
+    hashTable.insert("nick", 1900);
+    hashTable.insert("tucker", 1);
+    hashTable.remove("tucker");
+    expect(hashTable._limit).toEqual(2);
+    expect(hashTable.retrieve("nick")).toEqual(1900);
+    });
+  });
 });
