@@ -27,7 +27,7 @@ Trie.prototype.contains = function(strValue){
         if(context.children[i].value === string.charAt(0)){
           containsStrValue = context.children[i].contains(string.substring(1));
           break;
-        } 
+        }
         containsStrValue = false;
       }
     } else {
@@ -39,7 +39,35 @@ Trie.prototype.contains = function(strValue){
 };
 
 Trie.prototype.remove = function(strValue){
-  	
+  var nodeArray = this.stringToNodeArray(strValue);
+  if (nodeArray.length === strValue.length + 1){
+    if (nodeArray[nodeArray.length-1].children.length === 0){
+      for (var i = nodeArray.length-1; i >= 0; i--){
+        if (nodeArray[i].children.length>1){
+          for (var j = 0; j < nodeArray[i].children.length; j++){
+            if(nodeArray[i].children[j].value === strValue[i]){
+              nodeArray[i].children.splice(j,1);
+              break;
+            }
+          }
+          break;
+        }
+      }
+    }
+  }
+};
+Trie.prototype.stringToNodeArray = function(strValue){
+  var nodeArray = [];
+  rPush = function(string, context){
+    nodeArray.push(context);
+    _.each(context.children, function(child, index){
+      if(child.value === string[0]){
+        rPush(string.substring(1), child);
+      } 
+    });
+  };
+  rPush(strValue, this);
+  return nodeArray;
 };
 
 Trie.prototype.getNextLetters = function(strValue){
@@ -56,7 +84,7 @@ Trie.prototype.getNextLetters = function(strValue){
         _.each(context.children, function(item){
           letterArray.push(item.value);
         });
-    } 
+    }
   };
   rLast(wholeString, this);
   return letterArray;
