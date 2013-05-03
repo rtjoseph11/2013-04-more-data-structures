@@ -36,9 +36,7 @@ BTree.prototype.insertElementBelowNode = function(value){
  };
 
 BTree.prototype.handlePromotion = function(value){
-  //debugger;
   var context = this;
-  //find the middle value
   var values = [];
   values.push(value);
   _.each(this.keys, function(item){
@@ -59,5 +57,4 @@ BTree.prototype.handlePromotion = function(value){
   context.keys = [values[middleIndex]];
   context.children.push(childBTreeOne);
   context.children.push(childBTreeTwo);
-
 };
