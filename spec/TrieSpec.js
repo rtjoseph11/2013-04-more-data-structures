@@ -22,10 +22,18 @@ describe("Trie", function(){
 		it("should not add duplicate letters to a node", function(){
           trie.insert('a');
           trie.insert('an');
-          expect(trie.getNextLetters('').toEqual(['a']));
+          expect(trie.getNextLetters('')).toEqual(['a']);
           trie.insert('ant');
           expect(trie.getNextLetters('a')).toEqual(['n']);
 		});
+		// it("should handle an empty string", function(){
+  //         // expect(trie.insert("")).not.toThrow();
+		// });
+		// it("should handle the same string twice", function(){
+  //         trie.insert('a');
+  //         // expect(trie.insert('a')).not.toThrow();
+  //         expect(trie.contains('aa')).not.toEqual(true);
+		// }); 
 	});
 	describe("#contains", function(){
       it('should return true for a key after it is inserted', function(){
@@ -34,7 +42,7 @@ describe("Trie", function(){
       });
       it('should return true for any subkeys within a key', function(){
         trie.insert('antimatter');
-        trie.inesrt('antithesis');
+        trie.insert('antithesis');
         expect(trie.contains('an')).toEqual(true);
         expect(trie.contains('ant')).toEqual(true);
         expect(trie.contains('anti')).toEqual(true);
@@ -90,7 +98,7 @@ describe("Trie", function(){
           expect(trie.getNextLetters('inn')).toEqual(['o']);
         });
         it("should return multiple letters", function(){
-          expect(trie.getNextLetters('in')).toEqual(['t','n']);
+          expect(trie.getNextLetters('in')).toEqual(['n','t']);
         });
         it("should return all starting letters for the top node", function(){
           expect(trie.getNextLetters("")).toEqual(['i','a']);
