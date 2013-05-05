@@ -1,28 +1,31 @@
 var BTree = function(){
   this.root = new BTree.Node();
+  this.root.bTree = this;
 };
 
 BTree.prototype.insert = function(value) {
-  this.root = this.root.insert(value);
+  this.root.insert(value);
 };
 
-BTree.Node = function(parent){
+BTree.Node = function(array){
   this.order = 2;
-  this.keys = [];
+  this.keys = array || [];
   this.children = [];
-  this.parent = parent;
+  this.parent = undefined;
 };
 
 BTree.Node.prototype.insert = function(value, left, right){
   if (_.contains(this.keys, value)) { throw new Error('not allowing duplicate values'); }
 
   if(this.children.length && !(left || right)){
-    this.findChild(value).insert(value);
+    this.findNode(value).insert(value);
   } else {
       this.keys = _(this.keys.concat([value])).sortBy(function(item){
         return item;
       });
-      if(left && right){this.children = _(this.children.concat([left, right])).sortBy(function(child){
+      if(left && right){this.children = _(_(this.children).reject(function(child){
+        return _(child.keys).contains(value);
+        }).concat([left, right])).sortBy(function(child){
         return child.keys[0];
         });
       }
@@ -30,7 +33,6 @@ BTree.Node.prototype.insert = function(value, left, right){
       var middle = Math.floor(this.keys.length/2);
       this.promoteValue(
         this.keys[middle],
-        // NOTE: fix constructor to accept list of keys
         new BTree.Node(this.keys.slice(0, middle)),
         new BTree.Node(this.keys.slice(middle+1))
       );
@@ -45,26 +47,21 @@ BTree.Node.prototype.findNode = function(value){
 };
 
 BTree.Node.prototype.promoteValue = function(value, left, right){
-  if(this.parent.root){ //this is now wrong..no parent tree
-    var bTree = this.parent;
-    bTree.root = new BTree.Node(this.parent);
-    bTree.root.insert(value);
-    bTree.root.children.push(left);
-    bTree.root.children.push(right);
-    left.parent = bTree.root;
-    right.parent = bTree.root;
+  if(this.bTree){
+    this.bTree.root = new BTree.Node([value]);
+    this.bTree.root.bTree = this.bTree;
+    this.bTree.root.children.push(left);
+    this.bTree.root.children.push(right);
+    left.parent = this.bTree.root;
+    right.parent = this.bTree.root;
+    delete this.bTree;
   } else if (this.parent.hasRoomForPromotion()) {
-    var index = this.parent.findIndexForInsertion(value);
-    this.parent.keys.splice(index, 0, value);
-    this.parent.children.splice(index, 0, left);
-    this.parent.children.splice(index, 0, right);
-
     this.parent.insert(value, left, right);
   }
 };
 
 BTree.Node.prototype.hasRoomForPromotion = function() {
-  return this.parent.keys.length < this.order;
+  return this.keys.length < this.order;
 };
 
 BTree.Node.prototype.findIndexForInsertion = function(value) {
