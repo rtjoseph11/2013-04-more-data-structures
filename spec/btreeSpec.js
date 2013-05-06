@@ -33,6 +33,13 @@ describe("B-Tree", function() {
       expect(_.contains(btree.root.keys,2)).toEqual(true);
       expect(_.contains(btree.root.keys,3)).toEqual(false);
     });
+    it('should have a parent node', function(){
+      btree.insert(2);
+      btree.insert(3);
+      btree.insert(4);
+      expect(btree.root.children[0].parent.keys[0]).toEqual(2);
+      expect(btree.root.children[1].parent.keys[0]).toEqual(2);
+    });
   describe('autobalancing', function(){
     beforeEach(function(){
       btree.insert(2);
@@ -46,6 +53,12 @@ describe("B-Tree", function() {
       expect(_.contains(btree.root.children[0].keys, 1)).toEqual(true);
       expect(_.contains(btree.root.children[1].keys, 3)).toEqual(true);
       expect(_.contains(btree.root.children[2].keys, 5)).toEqual(true);
+    });
+    it('should give promoted nodes a parent', function(){
+      btree.insert(5);
+      expect(btree.root.children[0].parent.keys[0]).toEqual(2);
+      expect(btree.root.children[1].parent.keys[0]).toEqual(2);
+      expect(btree.root.children[2].parent.keys[0]).toEqual(2);
     });
     it('should insert to the correct child', function(){
       btree.insert(5);
