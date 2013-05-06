@@ -31,10 +31,14 @@ BTree.Node.prototype.insert = function(value, left, right){
       }
     if (this.order < this.keys.length) {
       var middle = Math.floor(this.keys.length/2);
+      var left = new BTree.Node(this.keys.slice(0, middle));
+      var right = new BTree.Node(this.keys.slice(middle+1));
+      left.children = this.children.slice(0,middle+1);
+      right.children = this.children.slice(middle+1);
       this.promoteValue(
         this.keys[middle],
-        new BTree.Node(this.keys.slice(0, middle)),
-        new BTree.Node(this.keys.slice(middle+1))
+        left,
+        right
       );
     }
   }
@@ -55,7 +59,9 @@ BTree.Node.prototype.promoteValue = function(value, left, right){
     left.parent = this.bTree.root;
     right.parent = this.bTree.root;
     delete this.bTree;
-  } else if (this.parent.hasRoomForPromotion()) {
+  } else {//if (this.parent.hasRoomForPromotion()) {
+    left.parent = this.parent;
+    right.parent = this.parent;
     this.parent.insert(value, left, right);
   }
 };
