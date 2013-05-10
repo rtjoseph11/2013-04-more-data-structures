@@ -85,5 +85,28 @@ describe("B-Tree", function() {
     });
   });
   });
+  describe("#contains", function(){
+    beforeEach(function(){
+      btree.insert(1);
+      btree.insert(2);
+      btree.insert(3);
+      btree.insert(4);
+      btree.insert(5);
+      btree.insert(6);
+      btree.insert(7);
+      btree.insert(8);
+    });
+  it('should contain inserted values', function(){
+    expect(btree.contains(1)).toEqual(true);
+    expect(btree.contains(2)).toEqual(true);
+    expect(btree.contains(3)).toEqual(true);
+    expect(btree.contains(4)).toEqual(true);
+    expect(btree.contains(5)).toEqual(true);
+    expect(btree.contains(6)).toEqual(true);
+    expect(btree.contains(7)).toEqual(true);
+    expect(btree.contains(8)).toEqual(true);
+  });
+
+  });
 
 });

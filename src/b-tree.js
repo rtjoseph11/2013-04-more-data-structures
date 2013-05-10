@@ -6,12 +6,33 @@ var BTree = function(){
 BTree.prototype.insert = function(value) {
   this.root.insert(value);
 };
+BTree.prototype.contains = function(value){
+  return this.root.contains(value);
+};
 
 BTree.Node = function(array){
   this.order = 2;
   this.keys = array || [];
   this.children = [];
   this.parent = undefined;
+};
+
+BTree.Node.prototype.contains = function(value) {
+  console.log("Searching Keys: " + this.keys);
+  if (_(this.keys).contains(value)){
+    return true;
+  } else if (this.children && this.children.length > 0){
+    for (var i = 0; i < this.keys.length; i ++){
+      if (this.keys[i] > value){
+        return this.children[i].contains(value);
+        break;
+      } else {
+        return this.children[this.children.length-1].contains(value);
+      }
+    }
+  } else {
+    return false;
+  }
 };
 
 BTree.Node.prototype.insert = function(value, left, right){
@@ -31,10 +52,14 @@ BTree.Node.prototype.insert = function(value, left, right){
       }
     if (this.order < this.keys.length) {
       var middle = Math.floor(this.keys.length/2);
+      var left = new BTree.Node(this.keys.slice(0, middle));
+      var right = new BTree.Node(this.keys.slice(middle+1));
+      left.children = this.children.slice(0,middle+1);
+      right.children = this.children.slice(middle+1);
       this.promoteValue(
         this.keys[middle],
-        new BTree.Node(this.keys.slice(0, middle)),
-        new BTree.Node(this.keys.slice(middle+1))
+        left,
+        right
       );
     }
   }
@@ -55,7 +80,9 @@ BTree.Node.prototype.promoteValue = function(value, left, right){
     left.parent = this.bTree.root;
     right.parent = this.bTree.root;
     delete this.bTree;
-  } else if (this.parent.hasRoomForPromotion()) {
+  } else {//if (this.parent.hasRoomForPromotion()) {
+    left.parent = this.parent;
+    right.parent = this.parent;
     this.parent.insert(value, left, right);
   }
 };
