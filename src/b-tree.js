@@ -18,17 +18,15 @@ BTree.Node = function(array){
 };
 
 BTree.Node.prototype.contains = function(value) {
-  console.log("Searching Keys: " + this.keys);
   if (_(this.keys).contains(value)){
     return true;
-  } else if (this.children && this.children.length > 0){
+  } else if (this.children.length > 0){
     for (var i = 0; i < this.keys.length; i ++){
       if (this.keys[i] > value){
         return this.children[i].contains(value);
-      } else {
-        return this.children[this.children.length-1].contains(value);
       }
     }
+    return this.children[this.children.length-1].contains(value);
   } else {
     return false;
   }

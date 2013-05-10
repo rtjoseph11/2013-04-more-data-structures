@@ -87,6 +87,7 @@ describe("B-Tree", function() {
   });
   describe("#contains", function(){
     beforeEach(function(){
+      btree.insert(0);
       btree.insert(1);
       btree.insert(2);
       btree.insert(3);
