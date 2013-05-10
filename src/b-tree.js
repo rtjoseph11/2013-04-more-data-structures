@@ -25,7 +25,6 @@ BTree.Node.prototype.contains = function(value) {
     for (var i = 0; i < this.keys.length; i ++){
       if (this.keys[i] > value){
         return this.children[i].contains(value);
-        break;
       } else {
         return this.children[this.children.length-1].contains(value);
       }
@@ -52,10 +51,16 @@ BTree.Node.prototype.insert = function(value, left, right){
       }
     if (this.order < this.keys.length) {
       var middle = Math.floor(this.keys.length/2);
-      var left = new BTree.Node(this.keys.slice(0, middle));
-      var right = new BTree.Node(this.keys.slice(middle+1));
+      left = new BTree.Node(this.keys.slice(0, middle));
+      right = new BTree.Node(this.keys.slice(middle+1));
       left.children = this.children.slice(0,middle+1);
+      _(left.children).each(function(child){
+        child.parent = left;
+      });
       right.children = this.children.slice(middle+1);
+      _(right.children).each(function(child){
+        child.parent = right;
+      });
       this.promoteValue(
         this.keys[middle],
         left,
@@ -80,15 +85,11 @@ BTree.Node.prototype.promoteValue = function(value, left, right){
     left.parent = this.bTree.root;
     right.parent = this.bTree.root;
     delete this.bTree;
-  } else {//if (this.parent.hasRoomForPromotion()) {
+  } else {
     left.parent = this.parent;
     right.parent = this.parent;
     this.parent.insert(value, left, right);
   }
-};
-
-BTree.Node.prototype.hasRoomForPromotion = function() {
-  return this.keys.length < this.order;
 };
 
 BTree.Node.prototype.findIndexForInsertion = function(value) {
