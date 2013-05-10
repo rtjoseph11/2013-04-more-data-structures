@@ -87,6 +87,7 @@ describe("B-Tree", function() {
   });
   describe("#contains", function(){
     beforeEach(function(){
+      btree.insert(0);
       btree.insert(1);
       btree.insert(2);
       btree.insert(3);
@@ -96,17 +97,56 @@ describe("B-Tree", function() {
       btree.insert(7);
       btree.insert(8);
     });
-  it('should contain inserted values', function(){
-    expect(btree.contains(1)).toEqual(true);
-    expect(btree.contains(2)).toEqual(true);
-    expect(btree.contains(3)).toEqual(true);
-    expect(btree.contains(4)).toEqual(true);
-    expect(btree.contains(5)).toEqual(true);
-    expect(btree.contains(6)).toEqual(true);
-    expect(btree.contains(7)).toEqual(true);
-    expect(btree.contains(8)).toEqual(true);
+    it('should contain inserted values', function(){
+      expect(btree.contains(0)).toEqual(true);
+      expect(btree.contains(1)).toEqual(true);
+      expect(btree.contains(2)).toEqual(true);
+      expect(btree.contains(3)).toEqual(true);
+      expect(btree.contains(4)).toEqual(true);
+      expect(btree.contains(5)).toEqual(true);
+      expect(btree.contains(6)).toEqual(true);
+      expect(btree.contains(7)).toEqual(true);
+      expect(btree.contains(8)).toEqual(true);
+    });
   });
-
+  describe("#remove", function(){
+    it('should remove an element from the root', function(){
+      btree.insert(1);
+      btree.insert(2);
+      expect(btree.contains(1)).toEqual(true);
+      btree.remove(1);
+      expect(btree.contains(1)).toEqual(false);
+    });
+    describe('with a fully saturated leaf node', function(){
+      beforeEach(function(){
+        btree.insert(1);
+        btree.insert(2);
+        btree.insert(3);
+        btree.insert(4);
+      });
+      it('should insert an element back in the same place', function(){
+        btree.remove(3);
+        btree.insert(3);
+        expect(btree.root.children[1].keys[0]).toEqual(3);
+      });
+      it('should rebalance the root node using a saturated child', function(){
+        btree.remove(2);
+        expect(btree.root.keys[0]).toEqual(3);
+        expect(btree.contains(2)).toEqual(false);
+      });
+    });
+    describe('with the minimum number of elements in a leaf node', function(){
+      beforeEach(function(){
+        btree.insert(1);
+        btree.insert(2);
+        btree.insert(3);
+      });
+      it('should rebalance the three through promotion', function(){
+        btree.remove(3);
+        expect(btree.root.keys[0]).toEqual(1);
+        expect(btree.root.keys[1]).toEqual(2);
+      });
+    });
   });
 
 });
