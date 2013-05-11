@@ -30,7 +30,6 @@ BTree.Node.prototype.remove = function(value){
         var siblings = this.findSiblings();
         var indexInParent = this.findIndexInParent();
         if (siblings.length > this.MIN_LENGTH){
-          
         }
         //find the sibling
         //if it has more than min children
@@ -46,11 +45,25 @@ BTree.Node.prototype.remove = function(value){
         this.keys.splice(index,0,rightChildrenKeys[0]);
         rightChildrenKeys.splice(0,1);
       } else if (leftChildrenKeys.length===1 && rightChildrenKeys.length===1){
-        
       }
     }
   } else {
     this.findNode(value).remove(value);
+  }
+};
+
+BTree.Node.prototype.contains = function(value) {
+  if (_(this.keys).contains(value)){
+    return true;
+  } else if (this.children.length > 0){
+    for (var i = 0; i < this.keys.length; i ++){
+      if (this.keys[i] > value){
+        return this.children[i].contains(value);
+      }
+    }
+    return this.children[this.children.length-1].contains(value);
+  } else {
+    return false;
   }
 };
 
@@ -154,10 +167,6 @@ BTree.Node.prototype.promoteValue = function(value, left, right){
     right.parent = this.parent;
     this.parent.insert(value, left, right);
   }
-};
-
-BTree.Node.prototype.hasRoomForPromotion = function() {
-  return this.keys.length < this.order;
 };
 
 BTree.Node.prototype.findIndexForInsertion = function(value) {
