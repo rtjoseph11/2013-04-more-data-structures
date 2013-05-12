@@ -21,35 +21,7 @@ BTree.Node = function(array){
 };
 
 BTree.Node.prototype.remove = function(value){
-  var self = this;
-  if (_(this.keys).contains(value)){//value found
-    var index = this.keys.indexOf(value);
-    this.keys.splice(index,1);
-    if (!this.children.length) {//leaf node
-      if (this.keys.length < this.MIN_LENGTH){
-        var siblings = this.findSiblings();
-        var indexInParent = this.findIndexInParent();
-        if (siblings.length > this.MIN_LENGTH){
-        }
-        //find the sibling
-        //if it has more than min children
-        //rotate separator down, largest child up to be separator
-      }//do nothing if leaf node was saturated
-    } else {//internal node
-      var leftChildrenKeys = this.children[index].keys;
-      var rightChildrenKeys = this.children[index+1].keys;
-      if (leftChildrenKeys.length > 1) {
-        this.keys.splice(index,0,leftChildrenKeys[leftChildrenKeys.length-1]);
-        leftChildrenKeys.splice(leftChildrenKeys.length-1,1);
-      } else if (rightChildrenKeys.length > 1) {
-        this.keys.splice(index,0,rightChildrenKeys[0]);
-        rightChildrenKeys.splice(0,1);
-      } else if (leftChildrenKeys.length===1 && rightChildrenKeys.length===1){
-      }
-    }
-  } else {
-    this.findNode(value).remove(value);
-  }
+  
 };
 
 BTree.Node.prototype.contains = function(value) {
