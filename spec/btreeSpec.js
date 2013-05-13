@@ -170,6 +170,24 @@ describe("B-Tree", function() {
         expect(btree.root.children[1].keys[1]).toEqual(5);
         expect(btree.contains(3)).toEqual(false);
       });
+      it('should remove sparse right nodes', function(){
+        btree.remove(6);
+        btree.remove(5);
+        expect(btree.root.keys[1]).toEqual(undefined);
+        expect(btree.root.keys[0]).toEqual(2);
+        expect(btree.root.children[1].keys[0]).toEqual(3);
+        expect(btree.root.children[1].keys[1]).toEqual(4);
+        expect(btree.root.children[2]).toEqual(undefined);
+      });
+      it('should remove sparse left nodes', function(){
+        btree.remove(6);
+        btree.remove(1);
+        expect(btree.root.keys[1]).toEqual(undefined);
+        expect(btree.root.keys[0]).toEqual(4);
+        expect(btree.root.children[1].keys[0]).toEqual(5);
+        expect(btree.root.children[0].keys[0]).toEqual(2);
+        expect(btree.root.children[2]).toEqual(undefined);
+      });
     });
 
   });

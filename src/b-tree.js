@@ -41,8 +41,11 @@ BTree.Node.prototype.remove = function(value){
       targetNode.remove(value); //need to refactor to handle children
     } else { // merge case
       if (targetIndex === this.keys.length){ //merge with left sibling
-        
-      } else { 
+        this.mergeNodes(leftSibling,targetNode,this.keys[targetIndex-1]);
+        this.keys.splice(targetIndex-1,1);
+        this.children.splice(targetIndex,1);
+        targetNode.remove(value);
+      } else {
         this.mergeNodes(targetNode,rightSibling,this.keys[targetIndex]);
         this.keys.splice(targetIndex,1);
         this.children.splice(targetIndex+1,1);
