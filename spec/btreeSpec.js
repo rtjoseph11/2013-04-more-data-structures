@@ -124,29 +124,13 @@ describe("B-Tree", function() {
         btree.insert(3);
         btree.insert(4);
       });
-      it('should insert an element back in the same place', function(){
-        btree.remove(3);
-        btree.insert(3);
+      it('should remove an element from the leaf node', function(){
+        btree.remove(4);
         expect(btree.root.children[1].keys[0]).toEqual(3);
-      });
-      it('should rebalance the root node using a saturated child', function(){
-        btree.remove(2);
-        expect(btree.root.keys[0]).toEqual(3);
-        expect(btree.contains(2)).toEqual(false);
+        expect(btree.contains(4)).toEqual(false);
       });
     });
-    describe('with the minimum number of elements in a leaf node', function(){
-      beforeEach(function(){
-        btree.insert(1);
-        btree.insert(2);
-        btree.insert(3);
-      });
-      it('should rebalance the three through promotion', function(){
-        btree.remove(3);
-        expect(btree.root.keys[0]).toEqual(1);
-        expect(btree.root.keys[1]).toEqual(2);
-      });
-    });
+
   });
 
 });

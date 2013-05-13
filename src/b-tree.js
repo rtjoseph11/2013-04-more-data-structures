@@ -21,7 +21,39 @@ BTree.Node = function(array){
 };
 
 BTree.Node.prototype.remove = function(value){
-  
+  if(this.children.length !== 0){ //not a leaf
+  } else { //leaf node
+    // var leftSibling = this.getLeftSibling(value);
+    // var rightSibling = this.getRightSibling(value);
+    if (this.keys.length > this.MIN_LENGTH-1){ //full leaf node
+      this.keys = _(this.keys).reject(function(key){ return key === value;});
+    // } else if (leftSibling.keys.length > this.MIN_LENGTH) {
+    //   var predKey = leftSibling.keys[leftSibling.keys.length-1];
+    //   this.keys.splice(this.keys.indexOf(value),1,predKey);
+    // } else if (rightSibling.keys.length > this.MIN_LENGTH){
+    //   var succKey = rightSibling.keys[0];
+    //   this.keys.splice(this.keys.indexOf(value),1,succKey);
+    }
+  }
+};
+
+BTree.Node.prototype.getRightSibling = function(value){
+    var index = _(this.parent.keys).reduce(function(memo, key, index){
+    return memo || value < key && index;
+  },null,this); //this is the right side parent index
+  if(index !== null && this.parent.children[index + 1]){
+    return this.parent.children[index + 1];
+  }
+};
+BTree.Node.prototype.getLeftSibling = function(value){
+  var index = _(this.parent.keys).reduce(function(memo, key, index){
+    return memo || value < key && index;
+    },null,this); //this is the right side parent index
+  if(index !== null && this.parent.children[index - 1]){
+      return this.parent.children[index - 1];
+  } else {
+    return this.parent.children[this.parent.keys.length - 1];
+  }
 };
 
 BTree.Node.prototype.contains = function(value) {
@@ -78,7 +110,7 @@ BTree.Node.prototype.insert = function(value, left, right){
 BTree.Node.prototype.findNode = function(value){
   return _(this.keys).reduce(function(child, key, index){
     return child || value < key && this.children[index];
-  }, null) || _(this.children).last();
+  }, null,this) || _(this.children).last();
 };
 
 BTree.Node.prototype.findIndexInParent = function(){
@@ -99,7 +131,7 @@ BTree.Node.prototype.findSiblings = function(){
     rtnArray.push(children[index+1]);
   }
   if (index && children[index-1]){
-    rtnArray.push(children[index+1]);
+    rtnArray.push(children[index-1]);
   }
   if (!index){
     rtnArray.push(children[this.parent.keys.length-1]);
