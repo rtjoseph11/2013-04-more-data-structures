@@ -22,19 +22,48 @@ BTree.Node = function(array){
 
 BTree.Node.prototype.remove = function(value){
   if(this.children.length !== 0){ //not a leaf
-  } else { //leaf node
-    // var leftSibling = this.getLeftSibling(value);
-    // var rightSibling = this.getRightSibling(value);
+    var target = this.findNode(value); //x
+    var targetNode = target["node"];
+    var targetIndex = target["key"];
+    var leftSibling = targetNode.getLeftSibling(value);
+    var rightSibling = targetNode.getRightSibling(value);
+    if (targetNode.keys.length > this.MIN_LENGTH){
+      return targetNode.remove(value);
+    } else if (leftSibling.keys.length > this.MIN_LENGTH) {
+      targetNode.keys.push(this.keys[targetIndex-1]);
+      this.keys[targetIndex-1] = leftSibling.keys[leftSibling.keys.length-1];
+      leftSibling.keys.splice(leftSibling.keys.length-1,1);
+      targetNode.remove(value);
+    } else if (rightSibling.keys.length > this.MIN_LENGTH){
+      targetNode.keys.push(this.keys[targetIndex]);
+      this.keys[targetIndex] = rightSibling.keys[0];
+      rightSibling.keys.splice(0,1);
+      targetNode.remove(value); //need to refactor to handle children
+    } else { // merge case
+      if (targetIndex === this.keys.length){ //merge with left sibling
+        
+      } else { 
+        this.mergeNodes(targetNode,rightSibling,this.keys[targetIndex]);
+        this.keys.splice(targetIndex,1);
+        this.children.splice(targetIndex+1,1);
+        targetNode.remove(value);
+      }
+    }
+  } else {//leaf node
     if (this.keys.length > this.MIN_LENGTH-1){ //full leaf node
       this.keys = _(this.keys).reject(function(key){ return key === value;});
-    // } else if (leftSibling.keys.length > this.MIN_LENGTH) {
-    //   var predKey = leftSibling.keys[leftSibling.keys.length-1];
-    //   this.keys.splice(this.keys.indexOf(value),1,predKey);
-    // } else if (rightSibling.keys.length > this.MIN_LENGTH){
-    //   var succKey = rightSibling.keys[0];
-    //   this.keys.splice(this.keys.indexOf(value),1,succKey);
+      return value;
     }
   }
+};
+
+BTree.Node.prototype.mergeNodes = function(left,right,value){
+  left.keys.push(value);
+  left.keys = left.keys.concat(right.keys);
+  _.each(right.children,function(item){
+    item.parent = left;
+  });
+  left.children.concat(right.children);
 };
 
 BTree.Node.prototype.getRightSibling = function(value){
@@ -75,7 +104,7 @@ BTree.Node.prototype.insert = function(value, left, right){
   if (_.contains(this.keys, value)) { throw new Error('not allowing duplicate values'); }
 
   if(this.children.length && !(left || right)){
-    this.findNode(value).insert(value);
+    this.findNode(value)['node'].insert(value);
   } else {
       this.keys = _(this.keys.concat([value])).sortBy(function(item){
         return item;
@@ -108,9 +137,9 @@ BTree.Node.prototype.insert = function(value, left, right){
 };
 
 BTree.Node.prototype.findNode = function(value){
-  return _(this.keys).reduce(function(child, key, index){
-    return child || value < key && this.children[index];
-  }, null,this) || _(this.children).last();
+  return _(this.keys).reduce(function(memo, key, index){
+    return memo || value < key && {node:this.children[index],key:index};
+  }, null,this) || {node:_(this.children).last(),key:this.children.length-1};
 };
 
 BTree.Node.prototype.findIndexInParent = function(){

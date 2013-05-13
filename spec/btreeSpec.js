@@ -129,6 +129,47 @@ describe("B-Tree", function() {
         expect(btree.root.children[1].keys[0]).toEqual(3);
         expect(btree.contains(4)).toEqual(false);
       });
+      it('should remove elements from a left side leaf node',function(){
+        btree.insert(0);
+        expect(btree.root.children[0].keys[0]).toEqual(0);
+        expect(btree.contains(0)).toEqual(true);
+        btree.remove(0);
+        expect(btree.contains(0)).toEqual(false);
+      });
+    });
+    describe('target node has the minimum number of elements', function(){
+      beforeEach(function(){
+        btree.insert(1);
+        btree.insert(2);
+        btree.insert(3);
+        btree.insert(4);
+        btree.insert(5);
+        btree.insert(6);
+      });
+      it('should rotate an element from right to left', function(){
+        btree.remove(3);
+        expect(btree.contains(3)).toEqual(false);
+        expect(btree.root.children[1].keys[0]).toEqual(4);
+        expect(btree.root.keys[1]).toEqual(5);
+        expect(btree.root.children[2].keys[0]).toEqual(6);
+      });
+      it('should rotate an element from right to left', function(){
+        btree.insert(0);
+        btree.remove(3);
+        expect(btree.contains(3)).toEqual(false);
+        expect(btree.root.children[1].keys[0]).toEqual(2);
+        expect(btree.root.keys[0]).toEqual(1);
+        expect(btree.root.children[0].keys[0]).toEqual(0);
+      });
+      it('should merge sparse center nodes', function(){
+        btree.remove(6);
+        btree.remove(3);
+        expect(btree.root.keys[1]).toEqual(undefined);
+        expect(btree.root.keys[0]).toEqual(2);
+        expect(btree.root.children[1].keys[0]).toEqual(4);
+        expect(btree.root.children[1].keys[1]).toEqual(5);
+        expect(btree.contains(3)).toEqual(false);
+      });
     });
 
   });
