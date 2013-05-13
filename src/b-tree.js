@@ -22,7 +22,7 @@ BTree.Node = function(array){
 
 BTree.Node.prototype.remove = function(value){
   if(this.children.length !== 0){ //not a leaf
-    var target = this.findNode(value); //x
+    var target = this.findNode(value);
     var targetNode = target["node"];
     var targetIndex = target["key"];
     var leftSibling = targetNode.getLeftSibling(value);
