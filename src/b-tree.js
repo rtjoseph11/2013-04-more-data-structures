@@ -32,20 +32,30 @@ BTree.Node.prototype.remove = function(value){
     } else if (leftSibling.keys.length > this.MIN_LENGTH) {
       targetNode.keys.push(this.keys[targetIndex-1]);
       this.keys[targetIndex-1] = leftSibling.keys[leftSibling.keys.length-1];
+      if(_.last(leftSibling.children)){
+        _.last(leftSibling.children).parent = targetNode;
+        targetNode.children.unshift(_.last(leftSibling.children));
+        leftSibling.children.pop();
+      }
       leftSibling.keys.splice(leftSibling.keys.length-1,1);
       targetNode.remove(value);
     } else if (rightSibling.keys.length > this.MIN_LENGTH){
       targetNode.keys.push(this.keys[targetIndex]);
       this.keys[targetIndex] = rightSibling.keys[0];
+      if (_.first(rightSibling.children)) {
+        _.first(rightSibling.children).parent = targetNode;
+        targetNode.children.push(_.first(rightSibling.children));
+        rightSibling.children.shift();
+      }
       rightSibling.keys.splice(0,1);
-      targetNode.remove(value); //need to refactor to handle children
+      targetNode.remove(value);
     } else { // merge case
       if (targetIndex === this.keys.length){ //merge with left sibling
         this.mergeNodes(leftSibling,targetNode,this.keys[targetIndex-1]);
         this.keys.splice(targetIndex-1,1);
         this.children.splice(targetIndex,1);
         targetNode.remove(value);
-      } else {
+      } else { //merge with right sibling
         this.mergeNodes(targetNode,rightSibling,this.keys[targetIndex]);
         this.keys.splice(targetIndex,1);
         this.children.splice(targetIndex+1,1);
