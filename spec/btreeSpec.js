@@ -189,7 +189,19 @@ describe("B-Tree", function() {
         expect(btree.root.children[2]).toEqual(undefined);
       });
     });
-
+    describe('it should remove from internal nodes', function(){
+        beforeEach(function(){
+          _.each(_.range(1,21),function(item){
+            btree.insert(item);
+          });
+        });
+        it('should delete an internal key by rotating counterclockwise',function(){
+          btree.remove(18);
+          expect(btree.contains(18)).toEqual(false);
+          expect(btree.contains(19)).toEqual(true);
+          expect(btree.root.children[1].children[2].keys[0]).toEqual(19);
+          expect(btree.root.children[1].children[2].children[1].keys[0]).toEqual(20);
+        });
+    });
   });
-
 });
