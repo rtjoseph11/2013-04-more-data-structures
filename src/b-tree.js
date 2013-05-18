@@ -13,23 +13,21 @@ BTree.prototype.remove = function(value){
   return this.root.remove(value);
 };
 BTree.Node = function(array){
-  this.order = 2;
+  this.order = 2; //min keys = 1, max keys = 3, max children
   this.keys = array || [];
   this.children = [];
   this.parent = undefined;
-  this.MIN_LENGTH = 1;
 };
 
 BTree.Node.prototype.remove = function(value){
-  debugger;
   if (_.contains(this.keys, value) && this.children.length !== 0){
     var keyIndex = _.indexOf(this.keys,value,true);
     var leftChild = this.children[keyIndex];
     var rightChild = this.children[keyIndex];
-    if (leftChild.keys.length > this.MIN_LENGTH){
+    if (leftChild.keys.length > this.order - 1){
       this.keys[keyIndex] = _.last(leftChild.keys);
       leftChild.remove(_.last(leftChild.keys));
-    } else if (rightChild.keys.length > this.MIN_LENGTH){
+    } else if (rightChild.keys.length > this.order - 1){
       this.keys[keyIndex] = _.first(rightChild.keys);
       rightChild.remove(_.first(rightChild.keys));
     }
@@ -39,9 +37,9 @@ BTree.Node.prototype.remove = function(value){
     var targetIndex = target["key"];
     var leftSibling = targetNode.getLeftSibling(value);
     var rightSibling = targetNode.getRightSibling(value);
-    if (targetNode.keys.length > this.MIN_LENGTH){
+    if (targetNode.keys.length > this.order - 1){
       return targetNode.remove(value);
-    } else if (leftSibling && leftSibling.keys.length > this.MIN_LENGTH) {
+    } else if (leftSibling && leftSibling.keys.length > this.order - 1) {
       targetNode.keys.push(this.keys[targetIndex-1]);
       this.keys[targetIndex-1] = leftSibling.keys[leftSibling.keys.length-1];
       if(_.last(leftSibling.children)){
@@ -51,7 +49,7 @@ BTree.Node.prototype.remove = function(value){
       }
       leftSibling.keys.splice(leftSibling.keys.length-1,1);
       targetNode.remove(value);
-    } else if (rightSibling && rightSibling.keys.length > this.MIN_LENGTH){
+    } else if (rightSibling && rightSibling.keys.length > this.order - 1){
       targetNode.keys.push(this.keys[targetIndex]);
       this.keys[targetIndex] = rightSibling.keys[0];
       if (_.first(rightSibling.children)) {
@@ -75,7 +73,7 @@ BTree.Node.prototype.remove = function(value){
       }
     }
   } else {//leaf node
-    if (this.keys.length > this.MIN_LENGTH-1){ //full leaf node
+    if (this.keys.length > this.order - 1-1){ //full leaf node
       this.keys = _(this.keys).reject(function(key){ return key === value;});
       return value;
     }
@@ -140,7 +138,7 @@ BTree.Node.prototype.insert = function(value, left, right){
         return child.keys[0];
         });
       }
-    if (this.order < this.keys.length) {
+    if (2 * this.order - 1< this.keys.length) {
       var middle = Math.floor(this.keys.length/2);
       left = new BTree.Node(this.keys.slice(0, middle));
       right = new BTree.Node(this.keys.slice(middle+1));
