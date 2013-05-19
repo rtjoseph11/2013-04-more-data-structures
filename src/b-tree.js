@@ -123,39 +123,57 @@ BTree.Node.prototype.contains = function(value) {
   }
 };
 
-BTree.Node.prototype.insert = function(value, left, right){
+BTree.Node.prototype.insert = function(value){
   if (_.contains(this.keys, value)) { throw new Error('not allowing duplicate values'); }
 
-  if(this.children.length && !(left || right)){
-    this.findNode(value)['node'].insert(value);
-  } else {
-      this.keys = _(this.keys.concat([value])).sortBy(function(item){
-        return item;
-      });
-      if(left && right){this.children = _(_(this.children).reject(function(child){
-        return _(child.keys).contains(value);
-        }).concat([left, right])).sortBy(function(child){
-        return child.keys[0];
-        });
-      }
-    if (2 * this.order - 1< this.keys.length) {
-      var middle = Math.floor(this.keys.length/2);
-      left = new BTree.Node(this.keys.slice(0, middle));
-      right = new BTree.Node(this.keys.slice(middle+1));
-      left.children = this.children.slice(0,middle+1);
+  if (this.bTree && (this.keys.length >= 2 * this.order - 1)){ //root node
+    this.bTree.root = new BTree.Node();
+    this.bTree.root.bTree = this.bTree;
+    var middle = Math.floor(this.keys.length/2);
+    var left = new BTree.Node(this.keys.slice(0,middle));
+    var right = new BTree.Node(this.keys.slice(middle+1));
+    left.children = this.children.slice(0,middle+1);
+    left.parent = this.bTree.root;
+    right.children = this.children.slice(middle+1);
+    right.parent = this.bTree.root;
+    _.each(left.children, function(item){
+      item.parent = left;
+    },this);
+    _.each(right.children,function(item){
+      item.parent = right;
+    },this);
+    this.bTree.root.keys.push(this.keys[middle]);
+    this.bTree.root.children = [left, right];
+    this.bTree.root.findNode(value)['node'].insert(value);
+  } else if(this.children.length){//not a leaf node
+    var target = this.findNode(value);
+    var targetNode = target['node'];
+    var targetIndex = target['key'];
+    if(targetNode.keys.length >= 2 * this.order - 1){  //target node full.  split node
+      var middle = Math.floor(targetNode.keys.length/2);
+      var left = new BTree.Node(targetNode.keys.slice(0,middle));
+      var right = new BTree.Node(targetNode.keys.slice(middle+1));
+      left.children = targetNode.children.slice(0,middle+1);
+      left.parent = this;
+      right.children = targetNode.children.slice(middle+1);
+      right.parent = this;
       _.each(left.children, function(item){
         item.parent = left;
       },this);
-      right.children = this.children.slice(middle+1);
       _.each(right.children,function(item){
         item.parent = right;
       },this);
-      this.promoteValue(
-        this.keys[middle],
-        left,
-        right
-      );
+      this.keys.splice(targetIndex,0,targetNode.keys[middle]);
+      this.children.splice(targetIndex,1,left);
+      this.children.splice(targetIndex + 1, 0, right);
+      this.findNode(value)['node'].insert(value);
+    } else {
+      targetNode.insert(value);
     }
+  } else {  //found a leaf node
+      this.keys = _(this.keys.concat([value])).sortBy(function(item){
+        return item;
+      });
   }
 };
 
