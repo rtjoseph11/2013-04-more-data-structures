@@ -23,20 +23,25 @@ BTree.Node.prototype.remove = function(value){
   if (_.contains(this.keys, value) && this.children.length !== 0){
     var keyIndex = _.indexOf(this.keys,value,true);
     var leftChild = this.children[keyIndex];
-    var rightChild = this.children[keyIndex];
+    var rightChild = this.children[keyIndex+1];
     if (leftChild.keys.length > this.order - 1){
       this.keys[keyIndex] = _.last(leftChild.keys);
       leftChild.remove(_.last(leftChild.keys));
     } else if (rightChild.keys.length > this.order - 1){
       this.keys[keyIndex] = _.first(rightChild.keys);
       rightChild.remove(_.first(rightChild.keys));
+    } else {//handle merge case for internal nodes
+      this.mergeNodes(leftChild,rightChild,this.keys[keyIndex]);
+      this.keys.splice(keyIndex,1);
+      this.children.splice(keyIndex+1,1);
+      leftChild.remove(value);
     }
   } else if(this.children.length !== 0){ //not a leaf
     var target = this.findNode(value);
     var targetNode = target["node"];
     var targetIndex = target["key"];
-    var leftSibling = targetNode.getLeftSibling(value);
-    var rightSibling = targetNode.getRightSibling(value);
+    var leftSibling = this.targetLeftSibling(targetIndex);
+    var rightSibling = this.targetRightSibling(targetIndex);
     if (targetNode.keys.length > this.order - 1){
       return targetNode.remove(value);
     } else if (leftSibling && leftSibling.keys.length > this.order - 1) {
@@ -86,28 +91,15 @@ BTree.Node.prototype.mergeNodes = function(left,right,value){
   _.each(right.children,function(item){
     item.parent = left;
   });
-  left.children.concat(right.children);
+  left.children = left.children.concat(right.children);
 };
 
-BTree.Node.prototype.getRightSibling = function(value){
-  var index = _(this.parent.keys).reduce(function(memo, key, index){
-    return memo || value < key && index;
-  },null,this); //this is the right side parent index
-  if(index !== false && this.parent.children[index + 1]){
-    return this.parent.children[index + 1];
-  }
+BTree.Node.prototype.targetRightSibling = function(index){
+  return this.children[index+1] ? this.children[index +1] : null;
 };
-BTree.Node.prototype.getLeftSibling = function(value){
-  var index = _(this.parent.keys).reduce(function(memo, key, index){
-    return memo || value < key && index;
-    },null,this); //this is the right side parent index
-  if(index !== false && this.parent.children[index - 1]){
-      return this.parent.children[index - 1];
-  } else if (index !== 0) {
-    return this.parent.children[this.parent.keys.length - 1];
-  }
+BTree.Node.prototype.targetLeftSibling = function(index){
+  return this.children[index-1] ? this.children[index-1] : null;
 };
-
 BTree.Node.prototype.contains = function(value) {
   if (_(this.keys).contains(value)){
     return true;
