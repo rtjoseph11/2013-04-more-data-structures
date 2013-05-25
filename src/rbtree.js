@@ -98,9 +98,9 @@ RBTree.prototype.balanceCase5 = function(){
 RBTree.prototype.rotateRight = function(){
   var pivot = this.left;
   pivot.parent = this.parent;
-  if(this.parent.left === this){
+  if(this.parent && this.parent.left === this){//for the root node you dont need to set this
     this.parent.left = pivot;
-  } else {
+  } else if(this.parent){
     this.parent.right = pivot;
   }
   this.left = pivot.right;
@@ -111,9 +111,9 @@ RBTree.prototype.rotateRight = function(){
 RBTree.prototype.rotateLeft = function(){
   var pivot = this.right;
   pivot.parent = this.parent;
-  if(this.parent.left === this){
+  if(this.parent && this.parent.left === this){//for the root node you dont need to set this
     this.parent.left = pivot;
-  } else {
+  } else if(this.parent){
     this.parent.right = pivot;
   }
   this.right = pivot.left;

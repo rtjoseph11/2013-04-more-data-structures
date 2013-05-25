@@ -29,7 +29,6 @@ describe("binarySearchTree", function() {
       rbTree.insert(20);
       rbTree.insert(5);
       rbTree.insert(2);
-      debugger;
       rbTree.insert(4);
       expect(rbTree.color).toEqual('black');
       expect(rbTree.value).toEqual(13);
@@ -45,6 +44,26 @@ describe("binarySearchTree", function() {
       expect(rbTree.left.right.color).toEqual('red');
       expect(rbTree.left.right.value).toEqual(5);
       expect(rbTree.left.right.parent).toEqual(rbTree.left);
+    });
+    it('should rotate when the right tree is unbalanced', function(){
+      rbTree.insert(5);
+      rbTree.insert(20);
+      rbTree.insert(25);
+      rbTree.insert(22);
+      expect(rbTree.color).toEqual('black');
+      expect(rbTree.value).toEqual(13);
+      expect(rbTree.right.color).toEqual('black');
+      expect(rbTree.right.value).toEqual(22);
+      expect(rbTree.right.parent).toEqual(rbTree);
+      expect(rbTree.left.color).toEqual('black');
+      expect(rbTree.left.value).toEqual(5);
+      expect(rbTree.left.parent).toEqual(rbTree);
+      expect(rbTree.right.left.color).toEqual('red');
+      expect(rbTree.right.left.value).toEqual(20);
+      expect(rbTree.right.left.parent).toEqual(rbTree.right);
+      expect(rbTree.right.right.color).toEqual('red');
+      expect(rbTree.right.right.value).toEqual(25);
+      expect(rbTree.right.right.parent).toEqual(rbTree.right);
     });
   });
 });

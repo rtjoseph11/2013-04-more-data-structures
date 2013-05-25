@@ -275,8 +275,6 @@ describe("B-Tree", function() {
           });
         });
         it('should delete an internal key by rotating counterclockwise',function(){
-      debugger;
-          
           btree.remove(8);
           expect(btree.root.keys[0]).toEqual(6);
           expect(btree.root.children[1].children[0].keys[0]).toEqual(7);
